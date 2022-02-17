@@ -52,8 +52,16 @@ class VK_user:
 
     def get_top_photo(self, user_id):
         result = self.VK.photos.get(owner_id=user_id, album_id='profile', extended=True)
+        result_2 = self.VK.photos.getUserPhotos(owner_id=user_id, extended=1)
         my_dict = list()
         for i in result['items']:
+            url = i['sizes'][len(i['sizes']) - 1]['url']
+            likes = i['likes']['count']
+            my_dict.append({
+                'url': url,
+                'likes': likes
+            })
+        for i in result_2['items']:
             url = i['sizes'][len(i['sizes']) - 1]['url']
             likes = i['likes']['count']
             my_dict.append({
