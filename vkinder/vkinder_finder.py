@@ -57,10 +57,11 @@ def send_photo(dict_users, user_id, vkuser, user_Subscriptions_list, user_intere
 
 def get_suitable_users(user_id, vkuser, user_Subscriptions_list, user_interests, user_music, user_books):
     super_users = []
-    suitable_users = vkuser.search_users()   # провели поиск подходящих аккаунтов 
-    for people in suitable_users:           #  поиск совпадений по подпискам
-        if not people['is_closed'] and vkuser.get_Subscriptions(people['id']) in user_Subscriptions_list:
-            super_users.append(people['id'])
+    suitable_users = vkuser.search_users()
+    for subscription in user_Subscriptions_list:
+        for people in suitable_users:           #  поиск совпадений по подпискам
+            if not people['is_closed'] and subscription in vkuser.get_Subscriptions(people['id']):
+                super_users.append(people['id'])
     for people in suitable_users:          #  поиск совпадений по интересам
         for el in list(map(str.strip, people.get('interests', '').split(','))):
             if el in user_interests:
