@@ -1,3 +1,3 @@
 name = 'postgres'
-password = '013161'
+password = '1111'
 host = 'localhost:5432'
