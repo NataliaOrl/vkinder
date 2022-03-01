@@ -24,20 +24,36 @@ def bot_speak():
             return user_id, text
 
 
-def get_params_search(user_id):
-    write_msg(user_id, 'Введите минимальный возраст будущего знакомого')
+def get_params_search(user_id, message):
+    if message in ('привет', 'здравствуй', 'hello', 'hi', 'заново', 'restart'):
+        write_msg(user_id, 'Добро пожаловать в самое лучшее приложение для знакомств!\n'
+                           'Введите минимальный возраст будущего знакомого')
     user = user_id
-    msg = bot_speak()[1]
-    if msg.isdigit():
-        min_age = int(msg)
-        write_msg(user_id, 'Введите максимальный возраст будущего знакомого')
-    msg = bot_speak()[1]
-    if msg.isdigit():
-        max_age = int(msg)
+    msg = ''
+    while not msg.isdigit():
+        msg = bot_speak()[1]
+        if msg.isdigit():
+            min_age = int(msg)
+            write_msg(user_id, 'Введите максимальный возраст будущего знакомого')
+        else:
+            write_msg(user_id, 'Введите корректный минимальный возраст будущего знакомого')
+    msg = ''
+    while not msg.isdigit():
+        msg = bot_speak()[1]
+        if msg.isdigit():
+            max_age = int(msg)
+        else:
+            write_msg(user_id, 'Введите корректный максимальный возраст будущего знакомого')
     return user, min_age, max_age
 
 
 def get_city_params(user_id):
     write_msg(user_id, 'Введите название города, в котором будем искать знакомства')
-    city = bot_speak()[1]
+    city = None
+    while not city:
+        answer = bot_speak()[1]
+        if answer.isalpha() or (answer.partition('-')[0] + answer.partition('-')[-1]).isalpha():
+            city = answer
+        else:
+            write_msg(user_id, 'Введите правильно название города, в котором будем искать знакомства')
     return city

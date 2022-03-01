@@ -18,11 +18,11 @@ class VK_user:
         vk = vk_session.get_api()
         self.VK = vk
 
-    def get_city(self):
+    def get_city(self, user_id):
         try:
             self.city = self.VK.users.get(user_ids=self.id, fields='city')[0]['city']['id']
         except KeyError:
-            self.city = self.VK.database.getCities(country_id=1, q=get_city_params())['items'][0]['id']
+            self.city = self.VK.database.getCities(country_id=1, q=get_city_params(user_id))['items'][0]['id']
         return self.city
 
     def get_sex(self):

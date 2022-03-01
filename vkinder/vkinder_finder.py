@@ -7,12 +7,10 @@ def get_user_info(token):
     user_id, message = bot_speak()
     if not check_db_user(user_id):
         register_user(user_id)
-    if message in ('привет', 'здравствуй', 'hello', 'hi', 'заново', 'restart'):
-        write_msg(user_id, 'Добро пожаловать в самое лучшее приложение для знакомст!\n')
-    params_search = get_params_search(user_id)
+    params_search = get_params_search(user_id, message)
     vkuser = VK_user(token, *params_search)
     vkuser.authorize_by_token()
-    vkuser.get_city()
+    vkuser.get_city(user_id)
     vkuser.get_sex()
     user_profile = vkuser.get_user_profile()  # получили данные о профиле заказчика
     user_interests = list(map(str.strip, user_profile.get('interests', '').split(',')))
