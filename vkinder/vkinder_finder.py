@@ -67,9 +67,8 @@ def get_suitable_users(user_id, vkuser, user_Subscriptions_list, user_interests,
     suitable_users = vkuser.search_users()
     for people in suitable_users:
         for subscription in user_Subscriptions_list:
-            for el in vkuser.get_Subscriptions(people['id'])['items']:
-                if subscription == el['id']:
-                    super_users[people['id']] = 4
+            if subscription in [x['id'] for x in vkuser.get_Subscriptions(people['id'])['items']]:
+                super_users[people['id']] = 4
         for el in list(map(str.strip, people.get('interests', '').split(','))):
             if el in user_interests and people['id'] not in super_users:
                 super_users[people['id']] = 3
