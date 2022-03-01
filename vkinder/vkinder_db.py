@@ -1,51 +1,75 @@
 import sqlalchemy as sq
+from sqlalchemy.exc import IntegrityError, InvalidRequestError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from base_bot import write_msg
 
 Base = declarative_base()
-engine = sq.create_engine('postgresql+psycopg2://postgres:password@localhost:5432/vkinder_db', client_encoding='utf8')
+engine = sq.create_engine('postgresql+psycopg2://postgres:013161@localhost:5432/vkinder_db', client_encoding='utf8')
 engine.connect()
 Session = sessionmaker(bind=engine)
 session = Session()
+
+
+class User(Base):
+    __tablename__ = 'user'
+    id = sq.Column(sq.Integer, primary_key=True, autoincrement=True)
+    user_id = sq.Column(sq.Integer, unique=True)
+
 
 class Favor_list(Base):
     __tablename__ = 'favorites'
     id = sq.Column(sq.Integer, primary_key=True)
     user_id = sq.Column(sq.Integer, unique=True)
     url_photo = sq.Column(sq.String)
+    id_user = sq.Column(sq.Integer, sq.ForeignKey('user.id', ondelete='CASCADE'))
+
 
 class Black_list(Base):
     __tablename__ = 'black list'
     id = sq.Column(sq.Integer, primary_key=True)
     user_id = sq.Column(sq.Integer, unique=True)
+    id_user = sq.Column(sq.Integer, sq.ForeignKey('user.id', ondelete='CASCADE'))
+
+
+def register_user(user_id):
+    try:
+        new_user = User(user_id=user_id)
+        session.add(new_user)
+        session.commit()
+        return True
+    except (IntegrityError, InvalidRequestError):
+        return False
+
+
+def check_db_user(id_owner):
+    owner_user = session.query(User).filter_by(user_id=id_owner).first()
+    return owner_user
+
 
 def check_db_favor(id):
     favor_user = session.query(Favor_list).filter_by(user_id=id).first()
     return favor_user
 
+
 def check_db_block(id):
     block_user = session.query(Black_list).filter_by(user_id=id).first()
     return block_user
 
+
 def add_user_favor(user_id, url_photo):
     user = Favor_list(
-    user_id=user_id,
-    url_photo=url_photo)
+        user_id=user_id,
+        url_photo=url_photo)
     session.add(user)
     session.commit()
+
 
 def add_user_block(user_id):
     user = Black_list(
-    user_id=user_id)
+        user_id=user_id)
     session.add(user)
     session.commit()
 
-def send_favorites(user_id):
-    for user, photo in session.query(Favor_list.user_id, Favor_list.url_photo): 
-        n = photo.split(',')
-        write_msg(user_id, f"Ссылка на страницу пользователя: https://vk.com/id{user}\n"           
-                           f"Фотографии пользователя с наибольшим количеством лайков:\n{n[0]}\n{n[1]}\n{n[2]}\n")
 
 def create():
     Base.metadata.create_all(engine)
@@ -53,6 +77,3 @@ def create():
 
 def drop():
     Base.metadata.drop_all(engine)
-
-
-
