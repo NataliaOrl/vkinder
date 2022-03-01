@@ -8,7 +8,7 @@ def get_user_info(token):
     if not check_db_user(user_id):
         register_user(user_id)
     if message in ('привет', 'здравствуй', 'hello', 'hi', 'заново', 'restart'):
-        write_msg(user_id, f'Добро пожаловать в самое лучшее приложение для знакомст!\n')
+        write_msg(user_id, 'Добро пожаловать в самое лучшее приложение для знакомст!\n')
     params_search = get_params_search(user_id)
     vkuser = VK_user(token, *params_search)
     vkuser.authorize_by_token()
@@ -29,7 +29,6 @@ def get_three_photo(dict_users, numb_user=3):
     for el in range(4, 0, -1):
         for id, photo in dict_users.items():
             if len(photo[1]) == numb_user and photo[0] == el:
-                print(id, photo[1][0]['url'], photo[1][1]['url'], photo[1][2]['url'])
                 yield (id, photo[1][0]['url'], photo[1][1]['url'], photo[1][2]['url'])
 
 
@@ -68,8 +67,6 @@ def send_photo(dict_users, user_id):
 def get_suitable_users(user_id, vkuser, user_Subscriptions_list, user_interests, user_music, user_books):
     super_users = {}
     suitable_users = vkuser.search_users()
-    print('suitable_users')
-    print(user_Subscriptions_list)
     for people in suitable_users:
         for subscription in user_Subscriptions_list:
             for el in vkuser.get_Subscriptions(people['id'])['items']:
@@ -78,20 +75,15 @@ def get_suitable_users(user_id, vkuser, user_Subscriptions_list, user_interests,
         for el in list(map(str.strip, people.get('interests', '').split(','))):
             if el in user_interests and people['id'] not in super_users:
                 super_users[people['id']] = 3
-                print(super_users)
         for el in list(map(str.strip, people.get('music', '').split(','))):
             if el in user_music and people['id'] not in super_users:
                 super_users[people['id']] = 2
-                print(super_users)
         for el in list(map(str.strip, people.get('books', '').split(','))):
             if el in user_books and people['id'] not in super_users:
                 super_users[people['id']] = 1
-                print(super_users)
-    print(super_users)
     dict_users = {}
     for id, priority in super_users.items():
         dict_users[id] = (priority, vkuser.get_top_photo(id))
-    print(dict_users)
     send_photo(dict_users, user_id)
 
 

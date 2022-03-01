@@ -2,9 +2,10 @@ import sqlalchemy as sq
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from config import name, password, host
 
 Base = declarative_base()
-engine = sq.create_engine('postgresql+psycopg2://postgres:013161@localhost:5432/vkinder_db', client_encoding='utf8')
+engine = sq.create_engine(f'postgresql+psycopg2://{name}:{password}@{host}/vkinder_db', client_encoding='utf8')
 engine.connect()
 Session = sessionmaker(bind=engine)
 session = Session()

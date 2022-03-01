@@ -9,7 +9,8 @@ class Test_VK_user(unittest.TestCase):
         self.sex = sex
         self.profile = {'id': 110468543, 'first_name': 'Ольга', 'last_name': 'Иванова',
                         'can_access_closed': True, 'is_closed': True,
-                        'interests': 'спорт, здоровое питание, здоровый образ жизни, интерьер, живопись, компьютерные игры, футбол',
+                        'interests': 'спорт, здоровое питание, здоровый образ жизни, интерьер, живопись,'
+                                     ' компьютерные игры, футбол',
                         'books': 'Грозовые ворота, Что делать?, S.T.A.L.K.E.R', 'music': 'Чайковский, Моцарт'}
 
     def tearDown(self):
