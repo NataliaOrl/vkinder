@@ -54,7 +54,7 @@ def get_city_params(user_id):
     city = None
     while not city:
         answer = bot_speak()[1]
-        if answer.isalpha() or ''.join(answer.split('-')).isalpha():
+        if ''.join(answer.split(' ')).isalpha() or ''.join(answer.split('-')).isalpha():
             city = answer
         else:
             write_msg(user_id, 'Введите правильно название города, в котором будем искать знакомства')
