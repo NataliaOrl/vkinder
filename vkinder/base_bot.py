@@ -44,6 +44,8 @@ def get_params_search(user_id, message):
             max_age = int(msg)
         else:
             write_msg(user_id, 'Введите корректный максимальный возраст будущего знакомого')
+    if min_age > max_age:
+        max_age, min_age = min_age, max_age
     return user, min_age, max_age
 
 
@@ -52,7 +54,7 @@ def get_city_params(user_id):
     city = None
     while not city:
         answer = bot_speak()[1]
-        if answer.isalpha() or (answer.partition('-')[0] + answer.partition('-')[-1]).isalpha():
+        if answer.isalpha() or ''.join(answer.split('-')).isalpha():
             city = answer
         else:
             write_msg(user_id, 'Введите правильно название города, в котором будем искать знакомства')

@@ -11,6 +11,7 @@ def get_user_info(token):
     vkuser = VK_user(token, *params_search)
     vkuser.authorize_by_token()
     vkuser.get_city(user_id)
+    write_msg(user_id, 'Начинаю поиск. Пожалуйста, подождите.')
     vkuser.get_sex()
     user_profile = vkuser.get_user_profile()  # получили данные о профиле заказчика
     user_interests = list(map(str.strip, user_profile.get('interests', '').split(',')))
