@@ -17,7 +17,7 @@ class User(Base):
     user_id = sq.Column(sq.Integer, unique=True)
 
 
-class Favor_list(Base):
+class FavorList(Base):
     __tablename__ = 'favorites'
     id = sq.Column(sq.Integer, primary_key=True)
     user_id = sq.Column(sq.Integer, unique=True)
@@ -25,7 +25,7 @@ class Favor_list(Base):
     id_user = sq.Column(sq.Integer, sq.ForeignKey('user.id', ondelete='CASCADE'))
 
 
-class Black_list(Base):
+class BlackList(Base):
     __tablename__ = 'black list'
     id = sq.Column(sq.Integer, primary_key=True)
     user_id = sq.Column(sq.Integer, unique=True)
@@ -48,17 +48,17 @@ def check_db_user(id_owner):
 
 
 def check_db_favor(id):
-    favor_user = session.query(Favor_list).filter_by(user_id=id).first()
+    favor_user = session.query(FavorList).filter_by(user_id=id).first()
     return favor_user
 
 
 def check_db_block(id):
-    block_user = session.query(Black_list).filter_by(user_id=id).first()
+    block_user = session.query(BlackList).filter_by(user_id=id).first()
     return block_user
 
 
 def add_user_favor(user_id, url_photo):
-    user = Favor_list(
+    user = FavorList(
         user_id=user_id,
         url_photo=url_photo)
     session.add(user)
@@ -66,7 +66,7 @@ def add_user_favor(user_id, url_photo):
 
 
 def add_user_block(user_id):
-    user = Black_list(
+    user = BlackList(
         user_id=user_id)
     session.add(user)
     session.commit()

@@ -4,17 +4,17 @@ from search_users import search_users
 from test_data import photos_get, three_photo, user_interests, user_music, user_books, user, subscriptions
 
 
-class Test_VK_user(unittest.TestCase):
+class Test_VKUser(unittest.TestCase):
     def test_get_user_info(self):
         user_profile = user
         user_interests = list(map(str.strip, user_profile.get('interests', '').split(',')))
         user_music = list(map(str.strip, user_profile.get('music', '').split(',')))
         user_books = list(map(str.strip, user_profile.get('books', '').split(',')))
-        user_Subscriptions = subscriptions
-        user_Subscriptions_list = []
-        for subscription in user_Subscriptions['items']:
-            user_Subscriptions_list.append(subscription['id'])
-        self.assertEqual(user_Subscriptions_list, [210627750])
+        user_subscriptions = subscriptions
+        user_subscriptions_list = []
+        for subscription in user_subscriptions['items']:
+            user_subscriptions_list.append(subscription['id'])
+        self.assertEqual(user_subscriptions_list, [210627750])
         self.assertEqual(user_interests, ['спорт', 'здоровое питание', 'здоровый образ жизни', 'интерьер', 'живопись',
                                           'компьютерные игры', 'футбол'])
         self.assertEqual(user_music, ['Чайковский', 'Моцарт'])

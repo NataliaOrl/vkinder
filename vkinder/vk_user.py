@@ -6,7 +6,7 @@ from vkinder_db import check_db_favor, check_db_block
 '''Получаем параметры поиска из аккаунта пользователя'''
 
 
-class VK_user:
+class VKUser:
     def __init__(self, token, id, age_from=18, age_to=18):
         self.token = token
         self.id = id
@@ -45,7 +45,7 @@ class VK_user:
                     result += [people]
         return result
 
-    def get_Subscriptions(self, user_id):
+    def get_subscriptions(self, user_id):
         result = self.VK.users.getSubscriptions(user_id=user_id, extended=1, count=50)
         return result
 
